@@ -1,0 +1,16 @@
+{
+    "name": "doofgamesbot",
+    "version": "1.0.0",
+    "description": "Opt-in to pingable game roles.",
+    "main": "bot.js",
+    "author": "PointMeAtTheDawn",
+    "dependencies": {
+        "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+        "winston": "^3.2.1"
+    },
+    "devDependencies": {
+        "eslint": "^5.16.0",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "eslint-plugin-import": "^2.17.2"
+    }
+}
