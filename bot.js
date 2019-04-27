@@ -14,12 +14,12 @@ client.on('ready', () => { console.log(`Connected! Logged in as ${client.user.ta
 client.on('message', async (message) => {
   // TODO Restrict from even receiving messages outside of this channel to cut usage.
   if (message.channel.id !== config.channel
-    || message.content.substring(0, 1) !== config.prefix
+    || message.content.substring(0, config.prefix.length) !== config.prefix
     || message.author.bot) {
     return;
   }
 
-  const args = message.content.substring(1).split(' ');
+  const args = message.content.substring(config.prefix.length).split(' ');
   if (args.length < 2 || args.length > 3) {
     message.channel.send('usage: COMMAND GAME [PLAYER]');
     return;
