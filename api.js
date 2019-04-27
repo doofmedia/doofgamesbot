@@ -3,7 +3,12 @@ const db = require('./db.js');
 
 async function add(game, player, message) {
   const connection = db.getDb();
-  const user = message.guild.members.find(m => m.user.username === player).user.id;
+  let user = message.guild.members.find(m => m.user.username === player);
+  if (!user) {
+    message.channel.send(`Can't find DOOFer ${player}, sorry.`);
+    return;
+  }
+  user = user.user.id;
   connection.query(`INSERT INTO players VALUES ('${game}', '${user}')`, (error) => {
     if (error) {
       if (error.code === 'ER_DUP_ENTRY') {

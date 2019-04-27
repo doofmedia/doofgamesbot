@@ -47,4 +47,4 @@ client.on('message', async (message) => {
   }
 });
 
-client.login(process.env.DBPASS);
+client.login(process.env.BOTPASS);
