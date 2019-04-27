@@ -21,7 +21,7 @@ async function add(game, player, message) {
     return;
   }
   user = user.id;
-  connection.query(`INSERT INTO players VALUES ('${game}', '${user}')`, (error) => {
+  connection.query('INSERT INTO players VALUES (?,?)', [game, user], (error) => {
     if (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         message.channel.send(`${player} already plays ${game}`);
@@ -36,7 +36,7 @@ async function add(game, player, message) {
 function remove(game, player, message) {
   const connection = db.getDb();
   const user = filterByName(message, player).id;
-  connection.query(`DELETE FROM players WHERE game = '${game}' AND player = '${user}'`, (error, results) => {
+  connection.query('DELETE FROM players WHERE game = ? AND player = ?', [game, user], (error, results) => {
     if (error) throw error;
     if (results.affectedRows === 0) {
       message.channel.send(`${player} doesn't play ${game}`);
@@ -48,7 +48,7 @@ function remove(game, player, message) {
 
 function list(game, player, message) {
   const connection = db.getDb();
-  connection.query(`SELECT player FROM players WHERE game like '%${game}%'`, (error, results) => {
+  connection.query('SELECT player FROM players WHERE game like ?', [game], (error, results) => {
     if (error) throw error;
     message.channel.send(results.reduce((players, row) => {
       const user = filterByID(message, row.player);
@@ -62,7 +62,7 @@ function list(game, player, message) {
 
 function ping(game, player, message) {
   const connection = db.getDb();
-  connection.query(`SELECT player FROM players WHERE game like '${game}'`, (error, results) => {
+  connection.query('SELECT player FROM players WHERE game like ?', [game], (error, results) => {
     if (error) throw error;
     message.channel.send(results.reduce((players, row) => {
       const user = filterByID(message, row.player);
