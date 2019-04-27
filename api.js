@@ -47,7 +47,7 @@ function list(game, player, message) {
 
 function ping(game, player, message) {
   const connection = db.getDb();
-  connection.query(`SELECT player FROM players WHERE game like '%${game}%'`, (error, results) => {
+  connection.query(`SELECT player FROM players WHERE game like '${game}'`, (error, results) => {
     if (error) throw error;
     message.channel.send(results.reduce((players, row) => {
       const user = message.guild.members.find(m => m.user.id === row.player);
