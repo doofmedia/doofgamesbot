@@ -9,9 +9,15 @@ function filterByID(message, pid) {
   return user;
 }
 
-function filterByName(message, pname) {
-  const user = message.guild.members.find(m => m.displayName.toLowerCase() === pname.toLowerCase());
-  return user;
+function getUserFromMention(message, mention) {
+  const matches = mention.match(/^<@!?(\d+)>$/);
+  const id = matches[1];
+  return message.client.users.get(id);
+}
+
+function filterByName(message, pName) {
+  const user = getUserFromMention(message, pName);
+  return message.guild.members.find(m => m.id === user.id);
 }
 
 function help(message) {
