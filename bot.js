@@ -31,7 +31,10 @@ client.on('message', async (message) => {
     player = args[2]; // eslint-disable-line prefer-destructuring
   }
 
-  switch (cmd) {
+  switch (cmd.toLowerCase()) {
+    case 'help':
+      api.help(message);
+      break;
     case 'ping':
       api.ping(game, player, message);
       break;
