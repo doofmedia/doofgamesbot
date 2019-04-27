@@ -10,7 +10,7 @@ function filterByID(message, pid) {
 }
 
 function filterByName(message, pname) {
-  const user = message.guild.members.find(m => m.displayName === pname);
+  const user = message.guild.members.find(m => m.displayName.toLowerCase() === pname.toLowerCase());
   return user;
 }
 
