@@ -33,7 +33,7 @@ async function add(game, player, message) {
     return;
   }
   user = user.id;
-  connection.query('INSERT INTO players VALUES (?,?)', [game, user], (error) => {
+  connection.query('INSERT INTO players VALUES (?,?)', [game.toLowerCase(), user], (error) => {
     if (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         message.channel.send(`${player} already plays ${game}`);
