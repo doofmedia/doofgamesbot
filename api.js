@@ -72,6 +72,21 @@ function list(game, player, message) {
   });
 }
 
+function listGames(message) {
+  const connection = db.getDb();
+  connection.query('SELECT game, COUNT(*) AS count FROM players GROUP BY game ORDER BY COUNT(*) DESC', (error, results) => {
+    if (error) throw error;
+    const response = results.reduce((resp, row) => {
+      let { count } = row;
+      if (row.count < 10) {
+        count = `0${row.count}`;
+      }
+      return `${resp}\n${count} ${row.game}`;
+    }, '');
+    message.channel.send(`\`\`\`Games:${response}\`\`\``);
+  });
+}
+
 function ping(game, player, message) {
   const connection = db.getDb();
   connection.query('SELECT player FROM players WHERE game like ?', [game], (error, results) => {
@@ -90,6 +105,7 @@ module.exports = {
   add,
   help,
   list,
+  listGames,
   ping,
   remove,
 };
