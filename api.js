@@ -21,7 +21,7 @@ function help(message) {
   ${config.prefix}REMOVE GAME [PLAYER] remove yourself or someone else from a game's roster
   ${config.prefix}LIST GAME            see who wants to be pinged to play a game with you
   ${config.prefix}PING GAME            @ everyone who's in a game's roster to play right now
-  ${config.prefix}LIST                 [TODO] see what games people want to play
+  ${config.prefix}LIST                 see what games people want to play
   \`\`\``);
 }
 

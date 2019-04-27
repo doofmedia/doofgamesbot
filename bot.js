@@ -36,16 +36,32 @@ client.on('message', async (message) => {
       api.help(message);
       break;
     case 'ping':
+      if (args.length !== 2) {
+        message.channel.send(`\`\`\`usage: ${config.prefix}ping GAME\`\`\``);
+        break;
+      }
       api.ping(game, player, message);
       break;
     case 'add':
+      if (args.length < 2 || args.length > 3) {
+        message.channel.send(`\`\`\`usage: ${config.prefix}add GAME [PLAYER]\`\`\``);
+        break;
+      }
       api.add(game, player, message);
       break;
     case 'remove':
+      if (args.length < 2 || args.length > 3) {
+        message.channel.send(`\`\`\`usage: ${config.prefix}remove GAME [PLAYER]\`\`\``);
+        break;
+      }
       api.remove(game, player, message);
       break;
     case 'list':
-      if (args.length > 1) {
+      if (args.length > 2) {
+        message.channel.send(`\`\`\`usage: ${config.prefix}list [GAME]\`\`\``);
+        break;
+      }
+      if (args.length === 2) {
         api.list(game, player, message);
         break;
       }
