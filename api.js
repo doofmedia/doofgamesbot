@@ -9,7 +9,7 @@ function filterByID(message, pid) {
 }
 
 function filterByName(message, pname) {
-  const user = message.guild.members.find(m => m.user.username === pname);
+  const user = message.guild.members.find(m => m.displayName === pname);
   return user;
 }
 
@@ -53,7 +53,7 @@ function list(game, player, message) {
     message.channel.send(results.reduce((players, row) => {
       const user = filterByID(message, row.player);
       if (user) {
-        return `${players}, ${user.user.username}`;
+        return `${players}, ${user.displayName}`;
       }
       return `${players}`;
     }, '').substring(2));

@@ -25,7 +25,7 @@ client.on('message', async (message) => {
     return;
   }
   const [cmd, game] = args;
-  let player = message.author.username;
+  let player = message.member.displayName;
   if (args[2]) {
     // TODO could we fetch the proper user here instead for cleaner code?
     player = args[2]; // eslint-disable-line prefer-destructuring
