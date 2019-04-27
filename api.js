@@ -15,7 +15,8 @@ function filterByName(message, pname) {
 }
 
 function help(message) {
-  message.channel.send(`\`\`\`Commands:
+  message.channel.send(`\`\`\`Use this bot to get pings from others on games you want to play together!
+Commands:
   ${config.prefix}HELP                 this message
   ${config.prefix}ADD GAME [PLAYER]    register yourself or someone else as a player of a game
   ${config.prefix}REMOVE GAME [PLAYER] remove yourself or someone else from a game's roster

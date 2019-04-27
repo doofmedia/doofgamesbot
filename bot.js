@@ -20,10 +20,6 @@ client.on('message', async (message) => {
   }
 
   const args = message.content.substring(config.prefix.length).split(' ');
-  //   if (args.length < 2 || args.length > 3) {
-  //     message.channel.send('usage: COMMAND GAME [PLAYER]');
-  //     return;
-  //   }
   const [cmd, game] = args;
   let player = message.member.displayName;
   if (args[2]) {
