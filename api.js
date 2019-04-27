@@ -74,7 +74,7 @@ function list(game, player, message) {
 
 function listGames(message) {
   const connection = db.getDb();
-  connection.query('SELECT game, COUNT(*) AS count FROM players GROUP BY game ORDER BY COUNT(*) DESC', (error, results) => {
+  connection.query('SELECT game, COUNT(*) AS count FROM players GROUP BY game ORDER BY COUNT(*) DESC, GAME ASC', (error, results) => {
     if (error) throw error;
     const response = results.reduce((resp, row) => {
       let { count } = row;
