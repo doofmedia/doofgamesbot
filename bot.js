@@ -13,8 +13,11 @@ client.on('ready', () => { console.log(`Connected! Logged in as ${client.user.ta
 
 client.on('message', async (message) => {
   try {
-  // TODO Restrict from even receiving messages outside of this channel to cut usage.
-    if (message.channel.id !== config.channel
+    if (process.argv[2] === 'dev') {
+      config.channel = config.devchannel;
+    }
+    // TODO Restrict from even receiving messages outside of this channel to cut usage.
+    if ((message.channel.id !== config.channel && message.channel.type !== 'dm')
     || message.content.substring(0, config.prefix.length) !== config.prefix
     || message.author.bot) {
       return;
@@ -22,7 +25,11 @@ client.on('message', async (message) => {
 
     const args = message.content.substring(config.prefix.length).split(' ');
     const [cmd, game] = args;
-    let player = message.member.displayName;
+    let player = message.author.username;
+    if (message.channel.type !== 'dm') {
+      player = message.member.displayName;
+    }
+
     if (args[2]) {
     // TODO could we fetch the proper user here instead for cleaner code?
       player = args[2]; // eslint-disable-line prefer-destructuring

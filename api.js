@@ -94,6 +94,11 @@ function listGames(message) {
       }
       return `${resp}\n${count} ${row.game}`;
     }, '');
+    if (message.channel.type !== 'dm') {
+      message.channel.send('Sending via DM to avoid channel spam.');
+      message.author.send(`\`\`\`Games:${response}\`\`\``);
+      return;
+    }
     message.channel.send(`\`\`\`Games:${response}\`\`\``);
   });
 }
