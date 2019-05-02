@@ -1,0 +1,15 @@
+version: '3'
+services:
+    bot:
+        image: "croselius/doofbot:${VERSION}"
+        container_name: doofbot
+        ports: 
+            - "8080:8080"
+        network_mode: bridge
+        volumes:
+            - doofbot_db:/usr/src/app
+        environment:
+            - BOTPASS=${BOTPASS}
+            - DBPASS=${DBPASS}
+volumes:
+    doofbot_db:

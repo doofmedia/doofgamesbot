@@ -1,29 +1,21 @@
-const mysql = require('mysql');
+const SQLite = require('better-sqlite3');
 
-let db;
+const sql = new SQLite('./doof.sqlite');
 
 function initDb() {
-  if (db) {
-    console.warn('Trying to init DB again!');
-    return db;
-  }
-  const connection = mysql.createConnection({
-    host: 'doofbotdb.cwoxwunurkun.us-east-1.rds.amazonaws.com',
-    user: 'croselius',
-    password: process.env.DBPASS,
-    database: 'doofbot',
-  });
-
-  connection.connect();
-  db = connection;
-  return db;
-}
-
-function getDb() {
-  return db;
+  sql.prepare('CREATE TABLE players (game TEXT NOT NULL, player TEXT NOT NULL, PRIMARY KEY (game, player));').run();
+  sql.pragma('synchronous = 1');
+  sql.pragma('journal_mode = wal');
+  const testput = sql.prepare('INSERT INTO players VALUES (@game, @player)');
+  const testget = sql.prepare('SELECT * FROM PLAYERS');
+  const entry = {
+    game: 'A',
+    player: 'B',
+  };
+  testput.run(entry);
+  console.log(testget.get());
 }
 
 module.exports = {
-  getDb,
   initDb,
 };
