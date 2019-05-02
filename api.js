@@ -2,20 +2,33 @@ const db = require('./db.js');
 const config = require('./config.json');
 
 function filterByID(message, pid) {
-  const user = message.guild.members.find(m => m.user.id === pid);
+  const user = message.guild.members.get(pid);
   if (!user) {
     console.log(`Unable to find user ${pid}, they may have left the server. Consider cleaning up?`);
   }
   return user;
 }
 
-function filterByName(message, pname) {
-  const user = message.guild.members.find(m => m.displayName.toLowerCase() === pname.toLowerCase());
-  return user;
+function getUserFromMention(message, mention) {
+  const matches = mention.match(/^<@!?(\d+)>$/);
+  if (matches) {
+    const id = matches[1];
+    return message.client.users.get(id);
+  }
+  return null;
+}
+
+function filterByName(message, pName) {
+  const user = getUserFromMention(message, pName);
+  if (!user) {
+    return message.guild.members.find(m => m.displayName === pName);
+  }
+  return message.guild.members.find(m => m.id === user.id);
 }
 
 function help(message) {
-  message.channel.send(`\`\`\`Commands:
+  message.channel.send(`\`\`\`Use this bot to get pings from others on games you want to play together!
+Commands:
   ${config.prefix}HELP                 this message
   ${config.prefix}ADD GAME [PLAYER]    register yourself or someone else as a player of a game
   ${config.prefix}REMOVE GAME [PLAYER] remove yourself or someone else from a game's roster
@@ -33,7 +46,7 @@ async function add(game, player, message) {
     return;
   }
   user = user.id;
-  connection.query('INSERT INTO players VALUES (?,?)', [game, user], (error) => {
+  connection.query('INSERT INTO players VALUES (?,?)', [game.toLowerCase(), user], (error) => {
     if (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         message.channel.send(`${player} already plays ${game}`);
@@ -62,19 +75,23 @@ function list(game, player, message) {
   const connection = db.getDb();
   connection.query('SELECT player FROM players WHERE game like ?', [game], (error, results) => {
     if (error) throw error;
-    message.channel.send(results.reduce((players, row) => {
+    let response = results.reduce((players, row) => {
       const user = filterByID(message, row.player);
       if (user) {
         return `${players}, ${user.displayName}`;
       }
       return `${players}`;
-    }, '').substring(2));
+    }, '').substring(2);
+    if (response.length === 0) {
+      response = `Sorry, unable to find any players for ${game}`;
+    }
+    message.channel.send(response);
   });
 }
 
 function listGames(message) {
   const connection = db.getDb();
-  connection.query('SELECT game, COUNT(*) AS count FROM players GROUP BY game ORDER BY COUNT(*) DESC', (error, results) => {
+  connection.query('SELECT game, COUNT(*) AS count FROM players GROUP BY game ORDER BY COUNT(*) DESC, GAME ASC', (error, results) => {
     if (error) throw error;
     const response = results.reduce((resp, row) => {
       let { count } = row;
@@ -83,6 +100,11 @@ function listGames(message) {
       }
       return `${resp}\n${count} ${row.game}`;
     }, '');
+    if (message.channel.type !== 'dm') {
+      message.channel.send('Sending via DM to avoid channel spam.');
+      message.author.send(`\`\`\`Games:${response}\`\`\``);
+      return;
+    }
     message.channel.send(`\`\`\`Games:${response}\`\`\``);
   });
 }
