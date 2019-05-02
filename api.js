@@ -11,12 +11,18 @@ function filterByID(message, pid) {
 
 function getUserFromMention(message, mention) {
   const matches = mention.match(/^<@!?(\d+)>$/);
-  const id = matches[1];
-  return message.client.users.get(id);
+  if (matches) {
+    const id = matches[1];
+    return message.client.users.get(id);
+  }
+  return null;
 }
 
 function filterByName(message, pName) {
   const user = getUserFromMention(message, pName);
+  if (!user) {
+    return message.guild.members.find(m => m.displayName === pName);
+  }
   return message.guild.members.find(m => m.id === user.id);
 }
 
