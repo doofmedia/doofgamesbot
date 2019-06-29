@@ -72,6 +72,13 @@ client.on('message', async (message) => {
         }
         api.listGames(message);
         break;
+      case 'listPlayer':
+        if (args.length !== 2) {
+          message.channel.send(`\`\`\`usage: ${config.prefix}listplayer PLAYER\`\`\``);
+          break;
+        }
+        api.listPlayer(player);
+        break;
       default:
     }
   } catch (error) {

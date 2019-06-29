@@ -109,6 +109,24 @@ function listGames(message) {
   });
 }
 
+function listPlayer(player, message) {
+  const connection = db.getDb();
+  connection.query('SELECT game FROM players WHERE player like ?', [player], (error, results) => {
+    if (error) throw error;
+    let response = results.reduce((games, row) => {
+      const user = filterByID(message, row.player);
+      if (user) {
+        return `${games}, ${user.displayName}`;
+      }
+      return `${games}`;
+    }, '').substring(2);
+    if (response.length === 0) {
+      response = `Sorry, unable to find any games for ${player}`;
+    }
+    message.channel.send(response);
+  });
+}
+
 function ping(game, player, message) {
   const connection = db.getDb();
   connection.query('SELECT player FROM players WHERE game like ?', [game], (error, results) => {
@@ -128,6 +146,7 @@ module.exports = {
   help,
   list,
   listGames,
+  listPlayer,
   ping,
   remove,
 };
