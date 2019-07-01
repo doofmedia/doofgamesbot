@@ -13,7 +13,7 @@ client.on('ready', () => { console.log(`Connected! Logged in as ${client.user.ta
 
 client.on('message', async (message) => {
   try {
-    if (process.argv[2] === 'dev') {
+    if (process.env.DOOFDEVMODE) {
       config.channel = config.devchannel;
     }
     // TODO Restrict from even processing messages outside of this channel to cut usage.
@@ -34,7 +34,6 @@ client.on('message', async (message) => {
     // TODO could we fetch the proper user here instead for cleaner code?
       player = args[2]; // eslint-disable-line prefer-destructuring
     }
-
 
     switch (cmd.toLowerCase()) {
       case 'help':
@@ -72,12 +71,16 @@ client.on('message', async (message) => {
         }
         api.listGames(message);
         break;
-      case 'listPlayer':
+      case 'check':
+      case '👀':
         if (args.length !== 2) {
           message.channel.send(`\`\`\`usage: ${config.prefix}listplayer PLAYER\`\`\``);
           break;
         }
-        api.listPlayer(player);
+        // TODO got some tech debt here from assumptions made earlier
+        // that player would always be the second argument :p.
+        player = args[1]; // eslint-disable-line prefer-destructuring
+        api.listPlayer(player, message);
         break;
       default:
     }

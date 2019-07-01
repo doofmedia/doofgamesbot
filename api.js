@@ -26,6 +26,15 @@ function filterByName(message, pName) {
   return message.guild.members.find(m => m.id === user.id);
 }
 
+function forceDM(message, response, title) {
+  if (message.channel.type !== 'dm') {
+    message.channel.send('Sending via DM to avoid channel spam.');
+    message.author.send(`\`\`\`${title}\n${response}\`\`\``);
+    return;
+  }
+  message.channel.send(`\`\`\`${response}\`\`\``);
+}
+
 function help(message) {
   message.channel.send(`\`\`\`Use this bot to get pings from others on games you want to play together!
 Commands:
@@ -79,10 +88,10 @@ function list(game, player, message) {
     let response = results.reduce((players, row) => {
       const user = filterByID(message, row.player);
       if (user) {
-        return `${players}, ${user.displayName}`;
+        return `${players}\n${user.displayName}`;
       }
       return `${players}`;
-    }, '').substring(2);
+    }, '');
     if (response.length === 0) {
       response = `Sorry, unable to find any players for ${game}`;
     }
@@ -101,30 +110,20 @@ function listGames(message) {
       }
       return `${resp}\n${count} ${row.game}`;
     }, '');
-    if (message.channel.type !== 'dm') {
-      message.channel.send('Sending via DM to avoid channel spam.');
-      message.author.send(`\`\`\`Games:${response}\`\`\``);
-      return;
-    }
-    message.channel.send(`\`\`\`Games:${response}\`\`\``);
+    forceDM(message, response, 'Games:');
   });
 }
 
 function listPlayer(player, message) {
   const connection = db.getDb();
-  connection.query('SELECT game FROM players WHERE player like ?', [player], (error, results) => {
+  const user = filterByName(message, player);
+  connection.query('SELECT game FROM players WHERE player like ?', [user.user.id], (error, results) => {
     if (error) throw error;
-    let response = results.reduce((games, row) => {
-      const user = filterByID(message, row.player);
-      if (user) {
-        return `${games}, ${user.displayName}`;
-      }
-      return `${games}`;
-    }, '').substring(2);
+    let response = results.reduce((games, game) => `${games} ${game.game}\n`, '');
     if (response.length === 0) {
       response = `Sorry, unable to find any games for ${player}`;
     }
-    message.channel.send(response);
+    forceDM(message, response, 'Games:');
   });
 }
 

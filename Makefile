@@ -10,4 +10,8 @@ push:
 
 .PHONY: run
 run:
-	docker run -e --restart=always DBPASS=${DBPASS} -e BOTPASS=${BOTPASS} -t croselius/doofbot:version$(VERSION)
+	docker run --restart=always -e DBPASS=${DBPASS} -e BOTPASS=${BOTPASS} -t croselius/doofbot:version$(VERSION)
+
+.PHONY: dev
+dev:
+	docker run --restart=always -e DOOFDEVMODE=true -e DBPASS=${DBPASS} -e BOTPASS=${BOTPASS} -t croselius/doofbot:version$(VERSION)
