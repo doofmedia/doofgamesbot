@@ -16,7 +16,7 @@ client.on('message', async (message) => {
     if (process.argv[2] === 'dev') {
       config.channel = config.devchannel;
     }
-    // TODO Restrict from even receiving messages outside of this channel to cut usage.
+    // TODO Restrict from even processing messages outside of this channel to cut usage.
     if ((message.channel.id !== config.channel && message.channel.type !== 'dm')
     || message.content.substring(0, config.prefix.length) !== config.prefix
     || message.author.bot) {

@@ -35,6 +35,7 @@ Commands:
   ${config.prefix}LIST GAME            see who wants to be pinged to play a game with you
   ${config.prefix}PING GAME            @ everyone who's in a game's roster to play right now
   ${config.prefix}LIST                 see what games people want to play
+  ${config.prefix}LISTPLAYER PLAYER    see what games a person plays         
   \`\`\``);
 }
 
