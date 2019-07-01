@@ -6,6 +6,14 @@ const config = require('./config.json');
 
 db.initDb();
 
+function bounceDM(message) {
+  if (message.channel.type === 'dm') {
+    message.channel.send('Command not supported in DM.');
+    return true;
+  }
+  return false;
+}
+
 // Initialize Discord Bot
 const client = new Discord.Client();
 
@@ -40,6 +48,7 @@ client.on('message', async (message) => {
         api.help(message);
         break;
       case 'ping':
+        if (bounceDM(message)) { break; }
         if (args.length !== 2) {
           message.channel.send(`\`\`\`usage: ${config.prefix}ping GAME\`\`\``);
           break;
@@ -47,6 +56,7 @@ client.on('message', async (message) => {
         api.ping(game, player, message);
         break;
       case 'add':
+        if (bounceDM(message)) { break; }
         if (args.length < 2 || args.length > 3) {
           message.channel.send(`\`\`\`usage: ${config.prefix}add GAME [PLAYER]\`\`\``);
           break;
@@ -54,6 +64,7 @@ client.on('message', async (message) => {
         api.add(game, player, message);
         break;
       case 'remove':
+        if (bounceDM(message)) { break; }
         if (args.length < 2 || args.length > 3) {
           message.channel.send(`\`\`\`usage: ${config.prefix}remove GAME [PLAYER]\`\`\``);
           break;
@@ -69,10 +80,12 @@ client.on('message', async (message) => {
           api.list(game, player, message);
           break;
         }
+        if (bounceDM(message)) { break; }
         api.listGames(message);
         break;
       case 'check':
       case '👀':
+        if (bounceDM(message)) { break; }
         if (args.length !== 2) {
           message.channel.send(`\`\`\`usage: ${config.prefix}listplayer PLAYER\`\`\``);
           break;

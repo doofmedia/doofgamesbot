@@ -48,7 +48,7 @@ Commands:
   \`\`\``);
 }
 
-async function add(game, player, message) {
+function add(game, player, message) {
   const connection = db.getDb();
   let user = filterByName(message, player);
   if (!user) {
