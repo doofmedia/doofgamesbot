@@ -77,10 +77,10 @@ client.on('message', async (message) => {
           break;
         }
         if (args.length === 2) {
+          if (bounceDM(message)) { break; }
           api.list(game, player, message);
           break;
         }
-        if (bounceDM(message)) { break; }
         api.listGames(message);
         break;
       case 'check':
