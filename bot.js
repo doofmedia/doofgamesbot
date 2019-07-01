@@ -6,6 +6,14 @@ const config = require('./config.json');
 
 db.initDb();
 
+function bounceDM(message) {
+  if (message.channel.type === 'dm') {
+    message.channel.send('Command not supported in DM.');
+    return true;
+  }
+  return false;
+}
+
 // Initialize Discord Bot
 const client = new Discord.Client();
 
@@ -13,10 +21,10 @@ client.on('ready', () => { console.log(`Connected! Logged in as ${client.user.ta
 
 client.on('message', async (message) => {
   try {
-    if (process.argv[2] === 'dev') {
+    if (process.env.DOOFDEVMODE) {
       config.channel = config.devchannel;
     }
-    // TODO Restrict from even receiving messages outside of this channel to cut usage.
+    // TODO Restrict from even processing messages outside of this channel to cut usage.
     if ((message.channel.id !== config.channel && message.channel.type !== 'dm')
     || message.content.substring(0, config.prefix.length) !== config.prefix
     || message.author.bot) {
@@ -35,12 +43,12 @@ client.on('message', async (message) => {
       player = args[2]; // eslint-disable-line prefer-destructuring
     }
 
-
     switch (cmd.toLowerCase()) {
       case 'help':
         api.help(message);
         break;
       case 'ping':
+        if (bounceDM(message)) { break; }
         if (args.length !== 2) {
           message.channel.send(`\`\`\`usage: ${config.prefix}ping GAME\`\`\``);
           break;
@@ -48,6 +56,7 @@ client.on('message', async (message) => {
         api.ping(game, player, message);
         break;
       case 'add':
+        if (bounceDM(message)) { break; }
         if (args.length < 2 || args.length > 3) {
           message.channel.send(`\`\`\`usage: ${config.prefix}add GAME [PLAYER]\`\`\``);
           break;
@@ -55,6 +64,7 @@ client.on('message', async (message) => {
         api.add(game, player, message);
         break;
       case 'remove':
+        if (bounceDM(message)) { break; }
         if (args.length < 2 || args.length > 3) {
           message.channel.send(`\`\`\`usage: ${config.prefix}remove GAME [PLAYER]\`\`\``);
           break;
@@ -70,7 +80,20 @@ client.on('message', async (message) => {
           api.list(game, player, message);
           break;
         }
+        if (bounceDM(message)) { break; }
         api.listGames(message);
+        break;
+      case 'check':
+      case '👀':
+        if (bounceDM(message)) { break; }
+        if (args.length !== 2) {
+          message.channel.send(`\`\`\`usage: ${config.prefix}listplayer PLAYER\`\`\``);
+          break;
+        }
+        // TODO got some tech debt here from assumptions made earlier
+        // that player would always be the second argument :p.
+        player = args[1]; // eslint-disable-line prefer-destructuring
+        api.listPlayer(player, message);
         break;
       default:
     }

@@ -26,6 +26,15 @@ function filterByName(message, pName) {
   return message.guild.members.find(m => m.id === user.id);
 }
 
+function forceDM(message, response, title) {
+  if (message.channel.type !== 'dm') {
+    message.channel.send('Sending via DM to avoid channel spam.');
+    message.author.send(`\`\`\`${title}\n${response}\`\`\``);
+    return;
+  }
+  message.channel.send(`\`\`\`${response}\`\`\``);
+}
+
 function help(message) {
   message.channel.send(`\`\`\`Use this bot to get pings from others on games you want to play together!
 Commands:
@@ -35,10 +44,11 @@ Commands:
   ${config.prefix}LIST GAME            see who wants to be pinged to play a game with you
   ${config.prefix}PING GAME            @ everyone who's in a game's roster to play right now
   ${config.prefix}LIST                 see what games people want to play
+  ${config.prefix}LISTPLAYER PLAYER    see what games a person plays         
   \`\`\``);
 }
 
-async function add(game, player, message) {
+function add(game, player, message) {
   const connection = db.getDb();
   let user = filterByName(message, player);
   if (!user) {
@@ -100,12 +110,20 @@ function listGames(message) {
       }
       return `${resp}\n${count} ${row.game}`;
     }, '');
-    if (message.channel.type !== 'dm') {
-      message.channel.send('Sending via DM to avoid channel spam.');
-      message.author.send(`\`\`\`Games:${response}\`\`\``);
-      return;
+    forceDM(message, response, 'Games:');
+  });
+}
+
+function listPlayer(player, message) {
+  const connection = db.getDb();
+  const user = filterByName(message, player);
+  connection.query('SELECT game FROM players WHERE player like ?', [user.user.id], (error, results) => {
+    if (error) throw error;
+    let response = results.reduce((games, game) => `${games} ${game.game}\n`, '');
+    if (response.length === 0) {
+      response = `Sorry, unable to find any games for ${player}`;
     }
-    message.channel.send(`\`\`\`Games:${response}\`\`\``);
+    forceDM(message, response, 'Games:');
   });
 }
 
@@ -128,6 +146,7 @@ module.exports = {
   help,
   list,
   listGames,
+  listPlayer,
   ping,
   remove,
 };
