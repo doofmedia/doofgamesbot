@@ -88,10 +88,10 @@ function list(game, player, message) {
     let response = results.reduce((players, row) => {
       const user = filterByID(message, row.player);
       if (user) {
-        return `${players}\n${user.displayName}`;
+        return `${players}, ${user.displayName}`;
       }
       return `${players}`;
-    }, '');
+    }, '').substring(2);
     if (response.length === 0) {
       response = `Sorry, unable to find any players for ${game}`;
     }
