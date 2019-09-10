@@ -1,9 +1,11 @@
 # doofbot
 
-To contribute, you'll want to set the following environment variables.
+To contribute, you'll want to set the following environment variables:
 
 DOOFDEVMODE=true
+
 DBPASS=<Ask Dawn for password!>
+
 BOTPASS=<Ask Dawn for password!>
 
 Then you can do `docker pull croselius/doofbot:version0.0.7` (or whatever the latest is at that time).
