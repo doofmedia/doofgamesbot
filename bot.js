@@ -85,9 +85,10 @@ client.on('message', async (message) => {
         break;
       case 'check':
       case '👀':
+      case 'listplayer':
         if (bounceDM(message)) { break; }
         if (args.length !== 2) {
-          message.channel.send(`\`\`\`usage: ${config.prefix}check PLAYER\`\`\``);
+          message.channel.send(`\`\`\`usage: ${config.prefix}listplayer PLAYER\`\`\``);
           break;
         }
         // TODO got some tech debt here from assumptions made earlier
