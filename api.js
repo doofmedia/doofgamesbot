@@ -131,7 +131,7 @@ function ping(game, player, message) {
   const connection = db.getDb();
   connection.query('SELECT player FROM players WHERE game like ?', [game], (error, results) => {
     if (error) throw error;
-    message.channel.send(results.reduce((players, row) => {
+    message.channel.send(`${player} wants to play ${game} ` + results.reduce((players, row) => {
       const user = filterByID(message, row.player);
       if (user) {
         return `${players}, ${user}`;
