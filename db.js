@@ -1,29 +1,29 @@
-const mysql = require('mysql');
+const mysql = require('mysql')
 
-let db;
+let db
 
-function initDb() {
+function initDb () {
   if (db) {
-    console.warn('Trying to init DB again!');
-    return db;
+    console.warn('Trying to init DB again!')
+    return db
   }
   const connection = mysql.createConnection({
     host: 'doofbotdb.cwoxwunurkun.us-east-1.rds.amazonaws.com',
     user: 'croselius',
     password: process.env.DBPASS,
-    database: 'doofbot',
-  });
+    database: 'doofbot'
+  })
 
-  connection.connect();
-  db = connection;
-  return db;
+  connection.connect()
+  db = connection
+  return db
 }
 
-function getDb() {
-  return db;
+function getDb () {
+  return db
 }
 
 module.exports = {
   getDb,
-  initDb,
-};
+  initDb
+}
