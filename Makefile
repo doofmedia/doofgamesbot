@@ -2,11 +2,11 @@ VERSION=`cat version.txt`
 
 .PHONY: build
 build:
-	docker build -t croselius/doofbot:version$(VERSION) .
+	docker build -t doofmedia/doofbot:version:$(VERSION) .
 
 .PHONY: push
 push:
-	docker push croselius/doofbot:version$(VERSION)
+	docker push doofmedia/doofbot:version:$(VERSION)
 
 .PHONY: run
 run:

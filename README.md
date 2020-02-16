@@ -1,13 +1,38 @@
 # doofbot
 
-To contribute, you'll want to set the following environment variables:
+This is the monorepo for all DOOF!Media Discord bots.
+It accepts a runtime config parameter determining which behavior it will express.
 
-DOOFDEVMODE=true
+## Contributing
 
-DBPASS=<Ask Dawn for password!>
+PRs welcome.
+Create issues for things that you want improved.
 
-BOTPASS=<Ask Dawn for password!>
+### Prerequisites
 
-Then you can do `docker pull croselius/doofbot:version0.0.7` (or whatever the latest is at that time).
+- Docker
+- Node.js
+- standardJS
+If you have any problems with prerequisites (or we forgot one!), please reach out.
 
-And then you can do `make run`. I should make the pull a make command for simplicity :p. If only shared LastPass folders could be free for the other stuff, they've got a decent CLI this could integrate with. PRs welcome, and feel free to file issues that you want improved.
+Set the following environment variables:
+DBPASS: Ask Dawn or Elliot for password!
+BOTPASS: Ask Dawn or Elliot for password!
+
+Additionally, you must set BOTMODE to one of:
+games,behaim,idl,mm. This will cause the bot to express the functions relevant to that mode.
+
+We use standard.js, and request you run `standard --fix` before pushing your commits.
+
+### Building
+
+You can use `node bot.js` to quickly iterate. You'll need to do `make build` and `make push` for your container to be available to deploy.
+
+### Deploying
+
+Set DOOFPRODMODE=true
+
+SSH on to the EC2 instance (ask Dawn or Elliot for details). Run:
+
+`docker pull doofmedia/doofbot:version:0.0.8`, or whatever version is latest at the time.
+`make run`
