@@ -22,8 +22,8 @@ client.on('ready', () => { console.log(`Connected! Logged in as ${client.user.ta
 client.on('message', async (message) => {
 // module.exports = function (message) {
   try {
-    if (process.env.DOOFDEVMODE) {
-      config.channel = config.devchannel
+    if (process.env.DOOFPRODMODE) {
+      config.channel = config.prodchannel
     }
     // TODO Restrict from even processing messages outside of this channel to cut usage.
     if ((message.channel.id !== config.channel && message.channel.type !== 'dm') ||
@@ -32,8 +32,8 @@ client.on('message', async (message) => {
       return
     }
 
-    let tempcmd = message.content.substring(config.prefix.length).split(' ')
-    let tempcmdname = tempcmd.shift()
+    const tempcmd = message.content.substring(config.prefix.length).split(' ')
+    const tempcmdname = tempcmd.shift()
     let tempargs = tempcmd.join(' ')
     if (!tempargs) {
       tempargs = []

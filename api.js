@@ -116,7 +116,7 @@ function listGames (message) {
 }
 
 function network (nodes, homestuck, message) {
-  let response = '```' + gridgraph.renderGridGraph(gridgraph.polycule(nodes), homestuck) + '```'
+  const response = '```' + gridgraph.renderGridGraph(gridgraph.polycule(nodes), homestuck) + '```'
   message.channel.send(response)
 }
 
