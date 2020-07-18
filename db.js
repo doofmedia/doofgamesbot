@@ -8,8 +8,8 @@ function initDb () {
     return db
   }
   const connection = mysql.createConnection({
-    host: 'doofbotdb.cwoxwunurkun.us-east-1.rds.amazonaws.com',
-    user: 'croselius',
+	  host: 'doofbot-db.cays2krdnjsl.us-east-2.rds.amazonaws.com',
+    user: 'admin',
     password: process.env.DBPASS,
     database: 'doofbot'
   })
